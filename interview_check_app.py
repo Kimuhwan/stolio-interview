@@ -7,7 +7,7 @@ import streamlit as st
 
 APP_VERSION = "1.4.0"
 
-DEFAULT_INPUT_FILE = "Stolio_5기_면접질문_지원자별"
+DEFAULT_INPUT_FILE = "Stolio_5기_면접질문_지원자별.xlsx"
 DEFAULT_OUTPUT_DIR = "outputs"
 
 EVAL_COLUMNS = [
