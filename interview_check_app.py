@@ -7,7 +7,7 @@ import streamlit as st
 
 APP_VERSION = "1.4.0"
 
-DEFAULT_INPUT_FILE = "Stolio_5기_면접.xlsx"
+DEFAULT_INPUT_FILE = "Stolio_5기_면접질문.xlsx"
 DEFAULT_OUTPUT_DIR = "outputs"
 
 EVAL_COLUMNS = [
@@ -182,22 +182,29 @@ labels = view_df.apply(candidate_label, axis=1).tolist()
 label_to_index = {labels[i]: int(view_df.index[i]) for i in range(len(labels))}
 
 # -------- Layout (stable) --------
+
+# [수정 포인트] 데이터를 먼저 확정 짓고, 그 다음에 화면(left/right)을 나눕니다.
+# 이렇게 하면 'left' 안에서 변수가 갇히는 문제를 원천 차단합니다.
+
+st.subheader("지원자 선택")
+selected_label = st.selectbox("지원자", labels, index=0)
+row_idx = label_to_index[selected_label]
+r = candidates.loc[row_idx]
+
+# --- 변수 정의 (여기서 미리 다 뽑아둡니다) ---
+candidate_id = safe_str(r.get("_candidate_id",""))
+name = safe_str(r.get("이름",""))
+sid  = safe_str(r.get("학번",""))
+mark = safe_str(r.get("학번표시",""))
+cat  = safe_str(r.get("분류",""))
+lvl  = safe_str(r.get("예상레벨","")) # ★ 이제 이 변수는 전역에서 안전합니다
+dup  = safe_str(r.get("중복지원",""))
+# ----------------------------------------
+
 left, right = st.columns([1,2], gap="large")
 
 with left:
-    st.subheader("지원자 선택")
-    selected_label = st.selectbox("지원자", labels, index=0)
-    row_idx = label_to_index[selected_label]
-    r = candidates.loc[row_idx]
-
-    candidate_id = safe_str(r.get("_candidate_id",""))
-    name = safe_str(r.get("이름",""))
-    sid  = safe_str(r.get("학번",""))
-    mark = safe_str(r.get("학번표시",""))
-    cat  = safe_str(r.get("분류",""))
-    lvl  = safe_str(r.get("예상레벨",""))
-    dup  = safe_str(r.get("중복지원",""))
-
+    # (위에서 이미 데이터를 뽑았으므로 여기선 보여주기만 합니다)
     st.markdown("#### 기본 정보")
     st.write(f"- 표시: **{mark}**")
     st.write(f"- 이름/학번: **{name} ({sid})**")
@@ -209,6 +216,7 @@ with left:
 
     # -------- Timer (robust, no external deps) --------
     if enable_timer:
+        # (타이머 코드는 그대로 유지)
         total = int(minutes) * 60
         k_running = f"timer_running_{candidate_id}"
         k_started = f"timer_started_{candidate_id}"
@@ -246,7 +254,6 @@ with left:
         if remaining <= 0:
             st.error("⏰ 면접 시간이 종료되었습니다. (원하면 리셋하세요)")
 
-        # 실시간 갱신: 진행중일 때만 1초마다 rerun
         if live_timer and st.session_state[k_running] and remaining > 0:
             time.sleep(1)
             st.rerun()
@@ -254,6 +261,7 @@ with left:
     st.divider()
 
     # -------- Existing evaluation preview --------
+    # (평가 미리보기 코드 그대로 유지)
     mask = (evals["interviewer"] == interviewer) & (evals["candidate_id"] == candidate_id)
     if mask.any():
         last = evals[mask].iloc[-1]
