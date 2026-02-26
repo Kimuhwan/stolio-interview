@@ -7,7 +7,7 @@ import streamlit as st
 
 APP_VERSION = "1.4.0"
 
-DEFAULT_INPUT_FILE = "Stolio_5기_면접질문_지원자별.xlsx"
+DEFAULT_INPUT_FILE = "Stolio_5기_면접.xlsx"
 DEFAULT_OUTPUT_DIR = "outputs"
 
 EVAL_COLUMNS = [
@@ -195,14 +195,14 @@ with left:
     sid  = safe_str(r.get("학번",""))
     mark = safe_str(r.get("학번표시",""))
     cat  = safe_str(r.get("분류",""))
-    lvl  = safe_str(r.get("예상레벨",""))
+    #lvl  = safe_str(r.get("예상레벨",""))
     dup  = safe_str(r.get("중복지원",""))
 
     st.markdown("#### 기본 정보")
     st.write(f"- 표시: **{mark}**")
     st.write(f"- 이름/학번: **{name} ({sid})**")
     if cat: st.write(f"- 분류: {cat}")
-    if lvl: st.write(f"- 예상레벨: {lvl}")
+    #if lvl: st.write(f"- 예상레벨: {lvl}")
     if dup: st.write(f"- 중복지원: {dup}")
 
     st.divider()
@@ -284,6 +284,7 @@ with right:
     st.markdown("**공통Q3**"); st.write(safe_str(r.get("공통Q3","")))
     st.markdown("**맞춤Q1**"); st.write(safe_str(r.get("맞춤Q1(심화)","")))
     st.markdown("**맞춤Q2**"); st.write(safe_str(r.get("맞춤Q2(규정/운영 연결)","")))
+    st.markdown("**맞춤Q3**"); st.write(safe_str(r.get("맞춤Q3(관심/경험 기반)","")))
 
     st.divider()
     st.subheader("점수 & 메모 입력")
