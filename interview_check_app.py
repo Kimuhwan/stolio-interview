@@ -351,7 +351,6 @@ with right:
                 "student_id": sid,
                 "mark": mark,
                 "category": cat,
-                "level": lvl,
 
                 "score_rules_fit": int(score_rules),
                 "score_output_evidence": int(score_output),
