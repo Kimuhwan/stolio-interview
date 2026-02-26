@@ -195,14 +195,14 @@ with left:
     sid  = safe_str(r.get("학번",""))
     mark = safe_str(r.get("학번표시",""))
     cat  = safe_str(r.get("분류",""))
-    #lvl  = safe_str(r.get("예상레벨",""))
+    lvl  = safe_str(r.get("예상레벨",""))
     dup  = safe_str(r.get("중복지원",""))
 
     st.markdown("#### 기본 정보")
     st.write(f"- 표시: **{mark}**")
     st.write(f"- 이름/학번: **{name} ({sid})**")
     if cat: st.write(f"- 분류: {cat}")
-    #if lvl: st.write(f"- 예상레벨: {lvl}")
+    if lvl: st.write(f"- 예상레벨: {lvl}")
     if dup: st.write(f"- 중복지원: {dup}")
 
     st.divider()
@@ -351,6 +351,7 @@ with right:
                 "student_id": sid,
                 "mark": mark,
                 "category": cat,
+                "level": lvl,
 
                 "score_rules_fit": int(score_rules),
                 "score_output_evidence": int(score_output),
